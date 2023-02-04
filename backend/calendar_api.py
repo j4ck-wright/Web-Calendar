@@ -47,10 +47,6 @@ def get_events(end_date, start_date = datetime.datetime.now(), max_results = 50,
     try:
         service = build('calendar', 'v3', credentials=get_credentials())
 
-        print(start_date)
-        print(end_date)
-        print("=============")
-
         events_result = service.events().list( calendarId='primary',
                                                timeMin=start_date,
                                                timeMax=end_date,
