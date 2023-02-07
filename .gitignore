@@ -17,6 +17,9 @@ dist
 dist-ssr
 *.local
 
+frontend/.vscode/*
+frontend/.DS_Store/*
+
 # Editor directories and files
 __pycache__
 .vscode/*
