@@ -11,7 +11,7 @@ export default function App(props : {backendReachable: boolean}){
                 <Error msg="The backend server is unreachable to React. Are you sure you have enabled the Flask server? Ensure server.py is running correctly and that the uri and port is configured correctly in index.tsx, read the README for more info"/>
             ) : (
                 <div className="h-[600px] w-[480px] border border-red-700 mx-auto my-4">
-                    <header className="flex space-x-52">
+                    <header className="flex justify-between">
                         <DateWidget/>
                         <WeatherWidget/>
                     </header>
