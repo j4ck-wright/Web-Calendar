@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function Error(props: any){
+export default function Error(props: {msg: string}){
     return (
         <div className="text-red-700 text-center my-8 fixed z-50 w-screen h-screen">
             <h1 className="font-bold text-5xl">Oh no!</h1>
