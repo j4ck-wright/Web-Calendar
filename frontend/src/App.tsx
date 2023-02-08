@@ -1,37 +1,16 @@
-import { useEffect } from 'react';
-import axios from 'axios'
+import React from "react"
+import Error from "./components/Error"
 
-// Example of axios connecting to backend successfully
-/*
-const url = "http://localhost:5000/status";
 
-function getData() {
-  axios({
-    method: "GET",
-    url:url,
-  })
-  .then((response: any) => {
-    const res =response.data
-    console.log("success!")
-    console.log(res)
-  }).catch((error: any) => {
-    if (error.response) {
-      console.log(error.response)
-      console.log(error.response.status)
-      console.log(error.response.headers)
-      }
-  })}
-*/
 
-const App = () => {
-
-  useEffect(() => {
-    //getData()
-  }, [])
-
-  return (
-    <p className='text-red-800 bold text-4xl text-center py-6'>Hello React!</p>
-  );
+export default function App(props : any){
+    return (
+        <div className="">
+            {props.backendReachable != true ? (
+                <Error msg="The backend server is unreachable to React. Are you sure you have enabled the Flask server? Ensure server.py is running correctly and that the uri and port is configured correctly in index.tsx, read the README for more info"/>
+            ) : (
+                <h2>Hello! We are reachable!</h2>
+            )} 
+        </div>
+    )
 }
-
-export default App
