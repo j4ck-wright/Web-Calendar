@@ -1,4 +1,3 @@
-import React from "react"
 import IconButton from '@mui/material/IconButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons'
@@ -14,7 +13,7 @@ export default function DateWidget(){
             <IconButton aria-label="left" size="small">
                 <FontAwesomeIcon icon={faChevronLeft} className="w-3 h-3"/>
             </IconButton>
-            <span className="text-sm">08 - 02 - 23</span>
+            <span className="text-sm">08-02-23</span>
             <IconButton aria-label="right" size="small">
                 <FontAwesomeIcon icon={faChevronRight} className="w-3 h-3"/>
             </IconButton>

@@ -1,4 +1,3 @@
-import React from "react"
 import Error from "./components/Error"
 import DateWidget from "./components/DateWidget"
 import WeatherWidget from "./components/WeatherWidget"
