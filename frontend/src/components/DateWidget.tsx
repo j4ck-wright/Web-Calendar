@@ -9,7 +9,7 @@ export default function DateWidget(){
             <span className="relative text-2xl font-medium after:w-[1px] after:h-4/5 after:top-[10%] after:right-[-4px] after:bg-black after:absolute">08</span>
             <span className="text-xl ml-2">September</span>
         </div>
-        <div className="flex">
+        <div className="flex items-center my-0.5">
             <IconButton aria-label="left" size="small">
                 <FontAwesomeIcon icon={faChevronLeft} className="w-3 h-3"/>
             </IconButton>
@@ -17,6 +17,7 @@ export default function DateWidget(){
             <IconButton aria-label="right" size="small">
                 <FontAwesomeIcon icon={faChevronRight} className="w-3 h-3"/>
             </IconButton>
+            <button className='mx-2 text-sm shadow-sm border border-black border-opacity-25 py-1 px-2 rounded-sm hover:bg-slate-200 transition-all' >Today</button>
         </div>
         </div>
     )
