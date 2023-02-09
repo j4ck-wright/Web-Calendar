@@ -1,4 +1,3 @@
-import React from "react"
 import HourlyWeather from "./HourlyWeather"
 
 export default function WeatherWidget(){
