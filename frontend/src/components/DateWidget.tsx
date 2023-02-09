@@ -6,8 +6,8 @@ import { faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons
 export default function DateWidget(){
     return (
        <div>
-        <div className="relative ml-2 mt-1 flex items-center">
-            <span className="relative text-2xl font-medium after:content-[''] after:w-[1px] after:h-4/5 after:top-1 after:right-[-4px] after:bg-black after:absolute">08</span>
+        <div className="relative ml-2 mt-2 flex items-center">
+            <span className="relative text-2xl font-medium after:w-[1px] after:h-4/5 after:top-[10%] after:right-[-4px] after:bg-black after:absolute">08</span>
             <span className="text-xl ml-2">September</span>
         </div>
         <div className="flex">
