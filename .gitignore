@@ -1,4 +1,3 @@
-*.json
 .env
 event.txt
 
@@ -19,6 +18,9 @@ dist-ssr
 
 frontend/.vscode/*
 frontend/.DS_Store/*
+
+backend/token.json
+backend/credentials.json
 
 # Editor directories and files
 __pycache__
