@@ -1,6 +1,5 @@
-import datetime
-import json
 import os.path
+import datetime
 
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -8,13 +7,19 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
-# [calendar name: calendar id] dict
-cal_name_id_storage = {}
-
 SCOPES = ["https://www.googleapis.com/auth/calendar"]
 
+calendar_names_to_IDs = (
+    {}
+)  # Pairing -> {"Holidays in United Kingdom": "en.uk#holiday@group.v.calendar.google.com", ...}
 
-def authenticate():
+
+def authenticate() -> None:
+    """
+    Authenticates user to Calendar API for first time use when token.js is added
+    Will create a new file, token.js to directory
+    """
+    creds = None
     if os.path.exists("token.json"):
         creds = get_credentials()
     # User login:
@@ -29,25 +34,66 @@ def authenticate():
             token.write(creds.to_json())
 
 
-def get_credentials():
+def get_credentials() -> Credentials:
     return Credentials.from_authorized_user_file("token.json", SCOPES)
 
 
-def get_events(
-    end_date, start_date=datetime.datetime.now(), max_results=50, calendar_id="primary"
-):
-    """Gets events from a single calendar (default the users primary calendar)
+def sanitise_time(time_string: str) -> str:
+    """
+    Check timings are in correct RCF3339 format
+    """
+    if type(time_string) != str:
+        raise TypeError("Time must be a string to be converted into RCF3339 standard")
 
-    Args:
-        end_date (datetime): ending datetime of results.
-        start_date (datetime, optional): starting datetime of results. Defaults to datetime.datetime.now().
-        max_results (integer, optional): maximum number of results to display. Defaults to 100.
-        calendar_id (integer, string, optional): calendar id to fetch events. Defaults to 'Primary'.
+    time = datetime.datetime.strptime(time_string, "%Y-%m-%dT%H:%M:%S")
+    return time.isoformat() + "Z"
 
-    Returns:
-        list: a list of event objects
+
+def sanitise_calendar_data(ctx: dict) -> dict:
+    """
+    Only include relevent data to be returned from event data
+    """
+    output = {}
+
+    output["id"] = ctx.get("id", None)
+    output["title"] = ctx.get("summary", None)
+    output["location"] = ctx.get("location", None)
+
+    start = ctx.get("start", None)
+    if start:
+        if start.get("dateTime"):
+            output["start"] = ctx["start"]["dateTime"]
+        elif start["date"]:
+            output["start"] = ctx["start"]["date"]
+
+    return output
+
+
+def get_all_calendar_names() -> dict[str, str]:
+    """
+    Puts names of calendars and their id in dictionary, calendar_names_to_IDs
+    """
+    try:
+        service = build("calendar", "v3", credentials=get_credentials())
+        calendar_list = service.calendarList().list().execute()
+        for cal in calendar_list["items"]:
+            calendar_names_to_IDs[cal["summary"]] = cal["id"]
+    except Exception as e:
+        raise RuntimeError(
+            f"Something went wrong fetching calendar names: \n {repr(e)}"
+        )
+
+    return calendar_names_to_IDs
+
+
+def get_events_from_calendar(
+    calendar_id: int, start: str, end: str, max_results
+) -> list[dict]:
+    """
+    Fetches event data from Google Calendar API
     """
 
+    # Get Calendar Data
     try:
         service = build("calendar", "v3", credentials=get_credentials())
 
@@ -55,8 +101,8 @@ def get_events(
             service.events()
             .list(
                 calendarId=calendar_id,
-                timeMin=start_date,
-                timeMax=end_date,
+                timeMin=start,
+                timeMax=end,
                 maxResults=max_results,
                 singleEvents=True,
                 orderBy="startTime",
@@ -65,69 +111,56 @@ def get_events(
         )
 
         events = events_result.get("items", [])
+    except HttpError as httpErr:
+        raise HttpError(f"Http Error: {repr(httpErr)}")
+    except Exception as exceptionErr:
+        raise Exception(f"Failed to get events: {repr(exceptionErr)}")
 
-        if not events:
-            print("No upcoming events found.")
-            return {}
+    if not events:
+        return  # No events found
 
-        event_dic = {}
+    output = []
 
-        for event in events:
-            try:
-                event_dic[event["id"]] = {
-                    "title": event["summary"],
-                    "location:": event.get("location", None),
-                    "start": event.get("start", None),
-                    "end": event.get("end", None),
-                }
-            except Exception as e:
-                print("Failed compiling event into event_dic")
+    for event in events:
+        desired_output = sanitise_calendar_data(event)
+        output.append(desired_output)
 
-        event_json = json.dumps(event_dic)
-        return event_json
-    except HttpError as error:
-        print("An error occurred: %s" % error)
-    except Exception as e:
-        print(f"Failed to get events: {repr(e)}")
+    return output
 
 
-def get_grouped_events(
-    calendar_ids, end_date, start_date=datetime.datetime.now(), max_results=50
-):
-    """Gets events from a collection of calendars, <calendar_ids>
-
-    Args:
-        calendar_ids (dict): dictionary of calendar ids to fetch events.
-        end_date (datetime): ending datetime of results.
-        start_date (datetime, optional): starting datetime of results. Defaults to datetime.datetime.now().
-        max_results (int, optional): maximum number of results to display. Defaults to 50.
-
-    Returns:
-        list: a list of event objects
+def compile_calendar_events(
+    calendars: list[str], start_time: str, end_time: str, max_results=50
+) -> list[dict]:
     """
+    Entry point, takes list of calendar names and processes each calendar
+    Returns list of events in order of date, items with no start date (i.e "All day" events, are at the top)
+    """
+    if len(calendar_names_to_IDs) == 0:
+        get_all_calendar_names()
 
+    compiled_calendars = []
 
-def get_calendar_id_from_name(name):
-    if cal_name_id_storage.get(name, False):
-        return cal_name_id_storage[name]
-    print(f"{name} is not a valid calendar dictionary")
-    return
+    for calendar in calendars:
+        id = calendar_names_to_IDs.get(calendar)
+        if not id:
+            raise RuntimeError(
+                f"Attempting to fetch a calendar that cannot be found ({calendar})"
+            )
 
+        start = sanitise_time(start_time)
+        end = sanitise_time(end_time)
 
-def get_calendar_names():
-    try:
-        service = build("calendar", "v3", credentials=get_credentials())
-        calendar_list = service.calendarList().list().execute()
-        for cal in calendar_list["items"]:
-            cal_name, cal_id = cal["summary"], cal["id"]
-            cal_name_id_storage[cal_name] = cal_id
-    except Exception as e:
-        print(f"Something went wrong fetching calendar names: \n {repr(e)}")
+        output = get_events_from_calendar(id, start, end, max_results)
+        if (output != None):
+            compiled_calendars.append(output)
+
+    flat_list = [item for sublist in compiled_calendars for item in sublist]
+    flat_list.sort(key=lambda x: x["start"])
+
+    return flat_list
 
 
 if __name__ == "__main__":
-    print(("=" * 10) + " CALENDAR API " + ("=" * 10))
-    print(
-        "This module should not be ran from main!!\nFor backend hosting, run <server.py> to open Flask routing\nFor more info, read the README"
-    )
-    print("=" * 34)
+    response = input("\nCalendar API\nAuthenticate OAuth token? (y/n): ")
+    if response.lower() == "y":
+        authenticate()
