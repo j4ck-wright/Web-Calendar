@@ -151,7 +151,7 @@ def compile_calendar_events(
         end = sanitise_time(end_time)
 
         output = get_events_from_calendar(id, start, end, max_results)
-        if (output != None):
+        if output != None:
             compiled_calendars.append(output)
 
     flat_list = [item for sublist in compiled_calendars for item in sublist]

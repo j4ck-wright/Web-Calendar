@@ -6,6 +6,7 @@ import calendar_api as cal_api
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
+
 @app.route("/status", methods=["GET"])
 def status():
     return {"status": True}
@@ -19,11 +20,10 @@ def events():
     end = request.args["end"]
     max = request.args.get("max")
 
-    if (max):
+    if max:
         return cal_api.compile_calendar_events(cal, start, end, max)
     return cal_api.compile_calendar_events(cal, start, end)
 
-    
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0")
