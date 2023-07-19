@@ -12,13 +12,21 @@ def status():
     return {"status": True}
 
 
-# Example: localhost:5000/events?calId=Jack^Jack Work&start=2023-07-18T00:00:00&end=2023-07-18T23:59:59
-@app.route("/events", methods=["GET"])
+#Example body:
+# {
+#     "calendars": ["Jack", "Jack Work"],
+#     "start": "2023-07-18T00:00:00",
+#     "end": "2023-07-18T23:59:59"
+# }
+
+@app.route("/events", methods=["POST"])
 def events():
-    cal = request.args["calId"].split("^")
-    start = request.args["start"]
-    end = request.args["end"]
-    max = request.args.get("max")
+    
+    ctx = request.json
+    cal = ctx['calendars']
+    start = ctx['start']
+    end = ctx['end']
+    max = ctx.get("max")
 
     if max:
         return cal_api.compile_calendar_events(cal, start, end, max)
