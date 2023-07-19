@@ -7,7 +7,7 @@ app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
 
-@app.route("/status", methods=["GET"])
+@app.route("/status", methods=["HEAD"])
 def status():
     return {"status": True}
 
