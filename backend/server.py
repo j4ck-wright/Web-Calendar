@@ -12,20 +12,20 @@ def status():
     return {"status": True}
 
 
-#Example body:
+# Example body:
 # {
 #     "calendars": ["Jack", "Jack Work"],
 #     "start": "2023-07-18T00:00:00",
 #     "end": "2023-07-18T23:59:59"
 # }
 
+
 @app.route("/events", methods=["POST"])
 def events():
-    
     ctx = request.json
-    cal = ctx['calendars']
-    start = ctx['start']
-    end = ctx['end']
+    cal = ctx["calendars"]
+    start = ctx["start"]
+    end = ctx["end"]
     max = ctx.get("max")
 
     if max:
