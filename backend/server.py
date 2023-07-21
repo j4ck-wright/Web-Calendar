@@ -34,7 +34,7 @@ def events():
     return cal_api.compile_calendar_events(cal, start, end)
 
 
-# Example:
+# Example: localhost:5000/astro?lat=53.801277&lon=-1.548567
 @app.route("/astro", methods=["GET"])
 def astro():
     args = request.args
