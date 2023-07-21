@@ -33,7 +33,8 @@ def events():
         return cal_api.compile_calendar_events(cal, start, end, max)
     return cal_api.compile_calendar_events(cal, start, end)
 
-#Example: 
+
+# Example:
 @app.route("/astro", methods=["GET"])
 def astro():
     args = request.args
@@ -42,7 +43,8 @@ def astro():
 
     return weather_api.get_astro_times(lat, lon)
 
-#Example: localhost:5000/weather?lat=53.801277&lon=-1.548567&starting_hour=20
+
+# Example: localhost:5000/weather?lat=53.801277&lon=-1.548567&starting_hour=20
 @app.route("/weather", methods=["GET"])
 def weather():
     args = request.args
@@ -51,6 +53,7 @@ def weather():
     starting_hour = int(args.get("starting_hour"))
 
     return weather_api.get_next_three_hour_forecast(starting_hour, lat, lon)
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0")
