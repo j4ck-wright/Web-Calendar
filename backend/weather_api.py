@@ -67,7 +67,26 @@ def invoke_external_api(lat: float, lon: float, days: int) -> json:
 
 def get_astro_times(lat: float, lon: float) -> dict:
     response = invoke_external_api(lat, lon, 1)
-    return response["forecast"]["forecastday"][0]["astro"]
+    astro = response["forecast"]["forecastday"][0]["astro"]
+    sunrise = astro["sunrise"]
+    sunset = astro["sunset"]
+
+    # Convert 12 hour clocks to 24
+    if sunrise[-2:] == "AM":
+        sunrise = sunrise[:-3]
+    else:
+        hour = int(sunrise[1:2])
+        hour += 12
+        sunrise = f"{hour}{sunrise[2:-3]}"
+
+    if sunset[-2:] == "AM":
+        sunset = sunset[:-3]
+    else:
+        hour = int(sunset[1:2])
+        hour += 12
+        sunset = f"{hour}{sunset[2:-3]}"
+
+    return {"sunrise": sunrise, "sunset": sunset}
 
 
 def get_next_three_hour_forecast(starting_hour: int, lat: float, lon: float) -> dict:
