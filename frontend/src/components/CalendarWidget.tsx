@@ -9,6 +9,5 @@ export default function CalendarWidget(){
             <CalendarEvent/>
         </div>
         </>
-        
     )
 }

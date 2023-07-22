@@ -1,10 +1,12 @@
-export default function HourlyWeather(){
+import { Icon } from '@iconify/react';
+
+export default function HourlyWeather(props: {time: string, icon: string, temp: string}){
 
     return (
         <div className="flex flex-col mx-1 items-center text-sm font-light">
-            <p>00:00</p>
-            <p>img</p>
-            <p>temp</p>
+            <p>{props.time}</p>
+            <Icon icon={props.icon} className='text-4xl'/>
+            <p>{props.temp}&deg;C</p>
         </div>
     )
 }

@@ -8,7 +8,7 @@ import App from './App'
 let backendReachable = false
 
 try {
-	const res = await axios.get(`http://localhost:5000/status`);
+	const res = await axios.head(`http://localhost:5000/status`);
   if (res.status == 200){
     backendReachable = true
   }
@@ -17,7 +17,7 @@ try {
 }
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <React.StrictMode>
+  //<React.StrictMode>
     <App backendReachable={backendReachable}/>
-  </React.StrictMode>,
+  //</React.StrictMode>,
 )
