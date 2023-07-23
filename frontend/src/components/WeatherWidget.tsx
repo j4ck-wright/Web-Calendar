@@ -44,8 +44,6 @@ export default function WeatherWidget(){
             if (prevDay != day){
                  prevDay = day
                  getAstro()
-                 console.log(astroData["sunrise"]);
-                 
             }
 
             updateTime(formattedTime)
