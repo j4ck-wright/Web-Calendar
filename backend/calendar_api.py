@@ -55,7 +55,7 @@ def sanitise_calendar_data(ctx: dict) -> dict:
     """
     output = {}
 
-    output["id"] = ctx.get("id", None)
+    output["id"] = ctx.get("id")
     output["title"] = ctx.get("summary", None)
     output["location"] = ctx.get("location", None)
 
@@ -65,6 +65,13 @@ def sanitise_calendar_data(ctx: dict) -> dict:
             output["start"] = ctx["start"]["dateTime"]
         elif start["date"]:
             output["start"] = ctx["start"]["date"]
+
+    end = ctx.get("end")
+    if end:
+        if end.get("dateTime"):
+            output["end"] = ctx["end"]["dateTime"]
+        elif end["date"]:
+            output["end"] = ctx["end"]["date"]
 
     return output
 
