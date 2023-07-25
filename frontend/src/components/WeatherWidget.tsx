@@ -6,7 +6,7 @@ export default function WeatherWidget(){
     
     const [time, updateTime] = useState("");
     const [weatherData, updateWeather] = useState([])
-    const [astroData, updateAstro] = useState([])
+    const [astroData, updateAstro] = useState<{[key: string]: string}>({});
 
     let prevHour: number;
     let prevDay: number;
