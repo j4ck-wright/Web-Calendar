@@ -55,17 +55,17 @@ export default function WeatherWidget(){
     
     return (
         <div className="relative flex items-center mt-2 mr-2">
-            <div className="flex items-center mr-2 after:w-[1px] after:h-4/5 after:top-[10%] after:right-[134px] after:bg-black after:absolute">
+            <div className="flex items-center mr-2 after:w-[1px] after:h-4/5 after:top-[10%] after:right-[167px] after:bg-black after:absolute">
                 <div className="container mr-1">
-                    <p className="font-bold capitalize text-xl">Leeds</p>
-                    <p className="text-center text-sm">{time}</p>
+                    <p className="font-bold capitalize text-2xl">Leeds</p>
+                    <p className="text-center text-xl">{time}</p>
                 </div>
                 <div className="suntimes flex-col items-center">
                     <div className="surnise flex">
-                        <Icon icon="wi:sunrise" className="text-xl"/><span className="text-sm">{astroData["sunrise"]}</span>
+                        <Icon icon="wi:sunrise" height="1.5rem"  className="text-xl"/><span className="text-lg">{astroData["sunrise"]}</span>
                     </div>
                     <div className="sunset flex">
-                        <Icon icon="wi:sunset" className="text-xl"/><span className="text-sm">{astroData["sunset"]}</span>
+                        <Icon icon="wi:sunset" height="1.5rem" className="text-xl"/><span className="text-lg">{astroData["sunset"]}</span>
                     </div>
                 </div>
             </div>
