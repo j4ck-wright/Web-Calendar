@@ -50,39 +50,41 @@ export default function CalendarWidget(){
     return (
         <>
         <h3 className="italic text-center text-2xl text-slate-800 my-2">Your events today</h3>
-<div className="container relative">        
-	<div className="h-[800px] overflow-y-scroll no-scrollbar after:w-full after:h-8 after:absolute after:bg-gradient-to-t after:from-white after:bottom-0 before:absolute before:bg-gradient-to-b before:from-white before:w-full before:h-6 before:z-50">
-        	    {calData.map(item => {
-                	let title: string = item["title"]
-                	let location: string = item["location"]
-                	if (location == null){
-                    		location = "No location set"
-               	 	}
-			if (title == null){
-				title = "Untitled Event"
-			}
-               	 let start: string = item["start"]
-               	 if (start.length === 10){
-                	    start = "Today"
-                	} else {
-                    	start = start.slice(11,16)
-               	 }
-                
+        <div className="container relative">        
+            <div className="h-[800px] overflow-y-scroll no-scrollbar after:w-full after:h-8 after:absolute after:bg-gradient-to-t after:from-white after:bottom-0 before:absolute before:bg-gradient-to-b before:from-white before:w-full before:h-6 before:z-50">
+                        {calData.map(item => {
+                            let title: string = item["title"]
+                            let location: string = item["location"]
 
-                let end: string = item["end"]
-                if (end.length === 10){
-                    end = "All day"
-                } else {
-                    end = end.slice(11,16)
-                }
+                            if (location == null){
+                                location = "No location set"
+                            }
 
-                return <CalendarEvent title={title} location={location} start={start} end={end}/>
-            })}
+                            if (title == null){
+                                title = "Untitled Event"
+                            }
 
-            {calData.length === 0 &&
-            <h2 className="text-center mt-8 text-xl opacity-80">You have no events today</h2>
-            }
-	</div>
+                            let start: string = item["start"]
+                            if (start.length === 10){
+                                    start = "Today"
+                                } else {
+                                    start = start.slice(11,16)
+                            }
+                            
+                            let end: string = item["end"]
+                            if (end.length === 10){
+                                end = "All day"
+                            } else {
+                                end = end.slice(11,16)
+                            }
+
+                        return <CalendarEvent title={title} location={location} start={start} end={end}/>
+                    })}
+
+                    {calData.length === 0 &&
+                    <h2 className="text-center mt-8 text-xl opacity-80">You have no events today</h2>
+                    }
+	        </div>
         </div>
         </>
     )
