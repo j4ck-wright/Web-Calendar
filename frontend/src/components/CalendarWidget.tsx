@@ -58,6 +58,9 @@ export default function CalendarWidget(){
 
                             if (location == null){
                                 location = "No location set"
+                            } else {
+                                let cutoff = location.indexOf(',')
+                                location = location.slice(0, cutoff)
                             }
 
                             if (title == null){
@@ -78,11 +81,11 @@ export default function CalendarWidget(){
                                 end = end.slice(11,16)
                             }
 
-                        return <CalendarEvent title={title} location={location} start={start} end={end}/>
+                        return <CalendarEvent title={title} location={location} start={start} end={end} key={item["id"]}/>
                     })}
 
                     {calData.length === 0 &&
-                    <h2 className="text-center mt-8 text-xl opacity-80">You have no events today</h2>
+                    <h2 className="text-center mt-8 text-3xl opacity-80">You have no events today</h2>
                     }
 	        </div>
         </div>
