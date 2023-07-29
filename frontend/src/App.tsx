@@ -14,7 +14,7 @@ export default function App(props : {backendReachable: boolean}){
                         <DateWidget/>
                         <WeatherWidget/>
                     </header>
-                    <CalendarWidget/>
+                  	<CalendarWidget/>			
                 </div>
             )}
         </div>
