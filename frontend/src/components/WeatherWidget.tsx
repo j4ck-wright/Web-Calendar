@@ -54,8 +54,8 @@ export default function WeatherWidget(){
 
     
     return (
-        <div className="relative flex items-center mt-2 mr-2">
-            <div className="flex items-center mr-2 after:w-[1px] after:h-4/5 after:top-[10%] after:right-[167px] after:bg-black after:absolute">
+        <div className="relative flex items-center mt-2 mr-2 dark:text-white">
+            <div className="flex items-center mr-2 after:w-[1px] after:h-4/5 after:top-[10%] after:right-[167px] after:bg-black after:absolute after:dark:bg-white">
                 <div className="container mr-1">
                     <p className="font-bold capitalize text-2xl">Leeds</p>
                     <p className="text-center text-xl">{time}</p>

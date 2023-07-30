@@ -4,8 +4,15 @@ import WeatherWidget from "./components/WeatherWidget"
 import CalendarWidget from "./components/CalendarWidget"
 
 export default function App(props : {backendReachable: boolean}){
+
+    const toggleTheme = () => {
+        document.body.classList.toggle('dark')
+    }
+
     return (
-        <div className="">
+
+        <div className="dark:bg-gray-800 transition-colors ">
+            <button onClick={toggleTheme}>dark toggle</button>
             {props.backendReachable != true ? (
                 <Error msg="The backend server is unreachable to React. Are you sure you have enabled the Flask server? Ensure server.py is running correctly and that the uri and port is configured correctly in index.tsx, read the README for more info"/>
             ) : (
@@ -14,7 +21,7 @@ export default function App(props : {backendReachable: boolean}){
                         <DateWidget/>
                         <WeatherWidget/>
                     </header>
-                  	<CalendarWidget/>			
+                  	<CalendarWidget/>
                 </div>
             )}
         </div>
