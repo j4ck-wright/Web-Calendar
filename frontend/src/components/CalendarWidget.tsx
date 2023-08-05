@@ -22,7 +22,7 @@ export default function CalendarWidget(){
         })
         .then(response => response.json())
         .then(json => updateCalData(json))
-        updateCalDataLoad(false)
+        updateCalDataLoad(true)
     }
 
     useEffect(() => {
