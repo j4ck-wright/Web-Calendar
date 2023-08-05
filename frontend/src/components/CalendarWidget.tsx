@@ -4,6 +4,7 @@ import CalendarEvent from "./CalendarEvent"
 export default function CalendarWidget(){
 
     const REFRESH_RATE_SECONDS = 60 * 10;
+    const [calDataLoaded, updateCalDataLoad] = useState(false);
     const [calData, updateCalData] = useState([]) 
     let selectedCalendars = ["Jack"]
 
@@ -20,7 +21,8 @@ export default function CalendarWidget(){
             )
         })
         .then(response => response.json())
-        .then(json => updateCalData(json));
+        .then(json => updateCalData(json))
+        updateCalDataLoad(false)
     }
 
     useEffect(() => {
@@ -52,6 +54,8 @@ export default function CalendarWidget(){
         <h3 className="italic text-center text-2xl text-slate-800 my-2 dark:text-white">Your events today</h3>
         <div className="container relative dark:text-white">        
             <div className="h-[800px] overflow-y-scroll no-scrollbar">
+                { calDataLoaded ? 
+                    <>
                         {calData.map(item => {
                             let title: string = item["title"]
                             let location: string = item["location"]
@@ -82,11 +86,18 @@ export default function CalendarWidget(){
                             }
 
                         return <CalendarEvent title={title} location={location} start={start} end={end} key={item["id"]}/>
-                    })}
+                        })}
 
-                    {calData.length === 0 &&
-                    <h2 className="text-center mt-8 text-3xl opacity-80 dark:text-white">You have no events today</h2>
-                    }
+                        {calData.length === 0 &&
+                        <h2 className="text-center mt-8 text-3xl opacity-80 dark:text-white">You have no events today</h2>
+                        }
+                    </>
+                :
+                <div className="flex justify-center flex-col items-center h-full">
+                    <span className="loading loading-spinner loading-lg"></span>
+                    <h4 className="text-center text-lg italic">Loading Calendar feed</h4>
+                </div>
+                }
 	        </div>
         </div>
         </>
