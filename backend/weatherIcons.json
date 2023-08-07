@@ -67,7 +67,7 @@
         },
         {
             "code": 1147,
-            "day": "wi-night-fog",
+            "day": "wi-day-fog",
             "night": "wi-night-fog"
         },
         {
@@ -177,7 +177,7 @@
         },
         {
             "code": 1240,
-            "day": "wi-night-alt-showers",
+            "day": "wi-day-showers",
             "night": "wi-night-alt-showers"
         },
         {

@@ -2,28 +2,39 @@ import { useEffect, useState } from "react";
 import { Icon } from '@iconify/react';
 import HourlyWeather from "./HourlyWeather"
 
+import axios, { AxiosError } from "axios";
+
 export default function WeatherWidget(){
     
     const [time, updateTime] = useState("");
     const [weatherData, updateWeather] = useState([])
     const [astroData, updateAstro] = useState<{[key: string]: string}>({});
     const [weatherLoaded, updateWeatherLoaded] = useState(false)
+    const [weatherErrorMsg, updateWeatherErrorMsg] = useState("")    
 
     let prevHour: number;
     let prevDay: number;
 
-    function getWeather(currentHour: number){
-        fetch("http://localhost:5000/weather?lat=53.801277&lon=-1.548567&starting_hour=" + currentHour)
-            .then(response => response.json())
-            .then(json => updateWeather(json))
+
+    function getWeather(currentHour: number) {
+        axios.get("http://localhost:5000/weather?lat=53.8008&lon=-1.548567&starting_hour=" + currentHour)
+        .then((response) => {
+            updateWeather(response.data)
             updateWeatherLoaded(true)
+        }).catch((error: AxiosError) => {
+            console.log("weather error");
+            updateWeatherErrorMsg("Weather - " + error.message)
+        })   
     }
 
-    function getAstro(){
-        fetch("http://localhost:5000/astro?lat=53.801277&lon=-1.548567")
-            .then(response => response.json())
-            .then(json => updateAstro(json));
+    function getAstro(currentHour: number) {
+        axios.get("http://localhost:5000/astro?lat=53.8008&lon=-1.548567")
+        .then((response) => {
+            updateAstro(response.data)
             
+        }).catch((error: AxiosError) => {
+            updateWeatherErrorMsg("Astro - " + error.message)
+        })   
     }
 
     useEffect(() => {
@@ -45,7 +56,7 @@ export default function WeatherWidget(){
 
             if (prevDay != day){
                  prevDay = day
-                 getAstro()
+                 getAstro(0)
             }
 
             updateTime(formattedTime)
@@ -79,15 +90,21 @@ export default function WeatherWidget(){
                             let time = item["time"]
                             let icon = item["icon"]
                             let temp = item["temperature_in_C"]
-                            return <HourlyWeather time={time} icon={icon} temp={temp}/>
+                            return <HourlyWeather time={time} icon={icon} temp={temp} key={time}/>
                         })}
                     </div>
                 </div>
         </>
         :
         <div className="flex flex-col items-center">
-            <h2 className="text-center w-60">Loading weather</h2>
-            <span className="loading loading-ring loading-md"></span>   
+            {!weatherErrorMsg ?
+            <>
+                <h2 className="text-center w-60">Loading weather</h2>
+                <span className="loading loading-ring loading-md"></span>
+            </> :
+                <h2 className="text-red max-w-[200px]">{weatherErrorMsg}</h2>
+            }
+            
         </div>
         }
         </>
