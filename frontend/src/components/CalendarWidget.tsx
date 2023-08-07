@@ -6,7 +6,7 @@ export default function CalendarWidget(){
     const REFRESH_RATE_SECONDS = 60 * 10;
     const [calDataLoaded, updateCalDataLoad] = useState(false);
     const [calData, updateCalData] = useState([]) 
-    let selectedCalendars = ["Jack"]
+    let selectedCalendars = ["Jack", "Jack Work", "Amy", "Amy Work"]
 
     function getCalendarEvents(calendars: string[], start: string, end: string,){
         fetch("http://localhost:5000/events", {
