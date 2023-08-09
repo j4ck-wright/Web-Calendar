@@ -2,10 +2,16 @@ import Error from "./components/Error";
 import DateWidget from "./components/DateWidget";
 import WeatherWidget from "./components/WeatherWidget";
 import CalendarWidget from "./components/CalendarWidget";
+import BottomNavbar from "./components/BottomNavbar";
 
 export default function App(props: { backendReachable: boolean }) {
-  const toggleTheme = () => {
+  let currentState = "NIGHT";
+
+  const toggleNightMode = (state: string) => {
+    //document.body.classList.toggle("dark");
+    if (state == currentState) return;
     document.body.classList.toggle("dark");
+    currentState = state;
   };
 
   return (

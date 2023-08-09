@@ -14,6 +14,8 @@ export default function WeatherWidget() {
   let prevHour: number;
   let prevDay: number;
 
+  let astroState: string;
+
   function getWeather(currentHour: number) {
     axios
       .get(
@@ -41,6 +43,13 @@ export default function WeatherWidget() {
       });
   }
 
+  function getAstroState(date: Date, sunrise: string, sunset: string): string {
+    let range = [sunrise, sunset];
+    let current = date.toLocaleTimeString().slice(0, 5); // HH:mm
+
+    return current >= range[0] && current <= range[1] ? "DAY" : "NIGHT";
+  }
+
   useEffect(() => {
     const interval = setInterval(() => {
       let d = new Date();
@@ -63,6 +72,20 @@ export default function WeatherWidget() {
         getAstro(0);
       }
 
+      let sunrise = document.getElementById("sunrise")?.innerText;
+      let sunset = document.getElementById("sunset")?.innerText;
+      if (sunrise && sunset) {
+        let newAstroState = getAstroState(d, sunrise, sunset);
+        if (newAstroState != astroState) {
+          astroState = newAstroState;
+          if (astroState === "DAY") {
+            document.body.classList.remove("dark");
+          } else {
+            document.body.classList.add("dark");
+          }
+        }
+      }
+
       updateTime(formattedTime);
     }, 1000);
 
@@ -82,11 +105,15 @@ export default function WeatherWidget() {
               <div className='suntimes flex-col items-center'>
                 <div className='surnise flex'>
                   <Icon icon='wi:sunrise' height='1.5rem' className='text-xl' />
-                  <span className='text-lg'>{astroData["sunrise"]}</span>
+                  <span className='text-lg' id='sunrise'>
+                    {astroData["sunrise"]}
+                  </span>
                 </div>
                 <div className='sunset flex'>
                   <Icon icon='wi:sunset' height='1.5rem' className='text-xl' />
-                  <span className='text-lg'>{astroData["sunset"]}</span>
+                  <span className='text-lg' id='sunset'>
+                    {astroData["sunset"]}
+                  </span>
                 </div>
               </div>
             </div>
