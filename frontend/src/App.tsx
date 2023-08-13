@@ -26,6 +26,7 @@ export default function App(props: { backendReachable: boolean }) {
             <WeatherWidget />
           </header>
           <CalendarWidget />
+          <BottomNavbar />
         </div>
       )}
     </div>

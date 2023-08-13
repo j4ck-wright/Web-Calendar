@@ -52,7 +52,7 @@ export default function CalendarWidget() {
         Your events today
       </h3>
       <div className='container relative dark:text-white'>
-        <div className='h-[800px] overflow-y-scroll no-scrollbar'>
+        <div className='h-[550px] overflow-y-scroll no-scrollbar'>
           {calDataLoaded ? (
             <>
               {calData.map((item) => {
