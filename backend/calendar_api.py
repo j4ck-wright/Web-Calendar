@@ -75,6 +75,15 @@ def sanitise_calendar_data(ctx: dict) -> dict:
 
     return output
 
+def get_all_calendars() -> dict[str]:
+    """
+    Returns names of calendars to the client
+    Similar to get_all_calendar_names but checks if cached value
+    """
+    if len(calendar_names_to_IDs) == 0:
+        get_all_calendar_names()
+    return list(calendar_names_to_IDs.keys())
+
 
 def get_all_calendar_names() -> dict[str, str]:
     """

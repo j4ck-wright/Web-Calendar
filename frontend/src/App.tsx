@@ -3,12 +3,23 @@ import DateWidget from "./components/DateWidget";
 import WeatherWidget from "./components/WeatherWidget";
 import CalendarWidget from "./components/CalendarWidget";
 import BottomNavbar from "./components/BottomNavbar";
+import { useEffect, useState } from "react";
+
+export interface IuserSettings {
+  displayedCalendars: string[];
+  //calendarColours: { [key: string]: string };
+}
 
 export default function App(props: { backendReachable: boolean }) {
-  let currentState = "NIGHT";
+  let currentState = "DAY";
+
+  const [userSettings, changeUserSettings] = useState({} as IuserSettings);
+
+  function updateSettings(input: IuserSettings) {
+    changeUserSettings(input);
+  }
 
   const toggleNightMode = (state: string) => {
-    //document.body.classList.toggle("dark");
     if (state == currentState) return;
     document.body.classList.toggle("dark");
     currentState = state;
@@ -25,8 +36,8 @@ export default function App(props: { backendReachable: boolean }) {
             <DateWidget />
             <WeatherWidget />
           </header>
-          <CalendarWidget />
-          <BottomNavbar />
+          <CalendarWidget userSettings={userSettings} />
+          <BottomNavbar updateSettings={updateSettings} />
         </div>
       )}
     </div>
