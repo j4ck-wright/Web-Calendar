@@ -33,6 +33,10 @@ def events():
         return cal_api.compile_calendar_events(cal, start, end, max)
     return cal_api.compile_calendar_events(cal, start, end)
 
+# Returns json of all calendar names
+@app.route("/calendars", methods=["GET"])
+def calendars():
+    return cal_api.get_all_calendars()
 
 # Example: localhost:5000/astro?lat=53.801277&lon=-1.548567
 @app.route("/astro", methods=["GET"])
