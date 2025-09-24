@@ -1,6 +1,6 @@
 # Web-Calendar
 
-Work in Progress
+Connect your Google calendar and display your daily events, used on a Raspberry Pi 3 with a small hdmi screen attached. Also includes a weather widget.
 
 ## Setup
 ### Backend
